@@ -2,9 +2,13 @@ package com.example.searchfunction
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.Menu
+import android.view.MenuItem
+import android.widget.SearchView
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 import com.example.searchfunction.databinding.ActivityMainBinding
+import java.util.Locale.filter
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
@@ -25,6 +29,43 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.menu_main, menu)
+        val searchItem: MenuItem = menu!!.findItem(R.id.actionSearch)
+        val searchView: SearchView = searchItem.actionView as SearchView
+        searchView.setOnQueryTextListener(object: SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(p0: String?): Boolean {
+                return false
+            }
+
+            override fun onQueryTextChange(p0: String?): Boolean {
+                filter(p0)
+                return false
+            }
+
+            private fun filter(p0: String?) {
+                val filteredList: ArrayList<Item> = arrayListOf()
+                if (p0 != null) {
+                    for (item in items) {
+                        if (item.name.contains(p0, true)) {
+                            filteredList.add(item)
+                        }
+                    }
+                }
+                rvAdapter.filterList(filteredList)
+            }
+        })
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            R.id.actionSearch -> {
+                return true
+            } else -> super.onOptionsItemSelected(item)
+        }
+    }
+
     private fun createRV() {
         createData()
         rvAdapter = RVAdapter(items)
@@ -34,11 +75,11 @@ class MainActivity : AppCompatActivity() {
 
     private fun createData() {
         items = arrayListOf(
-            Item("Name A1", 1),
-            Item("Name A2", 2),
-            Item("Name A3", 3),
-            Item("Name B1", 4),
-            Item("Name B2", 5)
+            Item("Name AA1", 1),
+            Item("Name AA2", 2),
+            Item("Name AA3", 3),
+            Item("Name BB1", 4),
+            Item("Name BB2", 5)
         )
     }
     private fun swipeFunctions() {

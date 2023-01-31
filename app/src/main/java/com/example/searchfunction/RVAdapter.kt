@@ -7,7 +7,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 
 class RVAdapter(
-    private val items: ArrayList<Item>
+    private var items: ArrayList<Item>
 ) : RecyclerView.Adapter<RVAdapter.NewViewHolder>() {
 
     class NewViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -32,5 +32,10 @@ class RVAdapter(
 
         holder.tvName.text = name
         holder.tvValue.text = value.toString()
+    }
+
+    fun filterList(filteredList: java.util.ArrayList<Item>) {
+        items = filteredList
+        notifyDataSetChanged()
     }
 }
